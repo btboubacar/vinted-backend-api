@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGODB_URI);
 
 app.get("/", (req, res) => {
   try {
-    res.status(200).json("Welcome to Vinted authentification server");
+    res.status(200).json("Welcome to Vinted web server");
   } catch (error) {
     res.status(500).json("Internal server error");
   }
