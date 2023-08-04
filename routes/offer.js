@@ -133,11 +133,6 @@ router.post("/offers", isAuthenticated, fileUpload(), async (req, res) => {
       }
     }
 
-    // // const keysObjUser = Object.keys(req.user.account);
-    // // if (keysObjUser.includes("avatar")) {
-    // //   req.user.account.avatar = { secure_url: uploadResult.secure_url };
-    // // }
-
     await newOffer.save();
 
     res.status(201).json(newOffer);
