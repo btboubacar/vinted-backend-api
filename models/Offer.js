@@ -8,6 +8,7 @@ const Schema = {
   product_price: { type: Number, max: 100_000 },
   product_details: Array,
   product_image: Object,
+  product_pictures: [Array],
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

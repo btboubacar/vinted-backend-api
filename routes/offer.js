@@ -94,17 +94,43 @@ router.post("/offers", isAuthenticated, fileUpload(), async (req, res) => {
     });
     newOffer.owner = req.user;
 
-    if (req.files) {
-      const fileUpload = convertToBase64(req.files.picture);
-      const uploadResult = await cloudinary.uploader.upload(fileUpload, {
-        folder: `/vinted/offers/${newOffer._id}`,
-      });
+    // check if input images is array or not
+    if (req.files && !Array.isArray(req.files.picture)) {
+      if (req.files.picture.mimetype.slice(0, 5) !== "image")
+        throw { status: 400, message: "File must be an image type" };
+      else {
+        const fileUpload = convertToBase64(req.files.picture);
+        const uploadResult = await cloudinary.uploader.upload(fileUpload, {
+          folder: `/vinted/offers/${newOffer._id}`,
+          public_id: "productPreview",
+        });
 
-      newOffer.product_image = {
-        secure_url: uploadResult.secure_url,
-        public_id: uploadResult.public_id,
-        signature: uploadResult.signature,
-      };
+        newOffer.product_image = uploadResult;
+      }
+    } else if (Array.isArray(req.files.picture)) {
+      // check that all files of image type before sending to cloudinary
+      for (let j = 0; j < req.files.picture.length; j++) {
+        if (req.files.picture[j].mimetype.slice(0, 5) !== "image")
+          throw { status: 400, message: "File(s) must be of image type" };
+      }
+      for (let i = 0; i < req.files.picture.length; i++) {
+        if (i === 0) {
+          const fileUpload = convertToBase64(req.files.picture[i]);
+          const uploadResult = await cloudinary.uploader.upload(fileUpload, {
+            folder: `/vinted/offers/${newOffer._id}`,
+            public_id: "productPreview",
+          });
+
+          newOffer.product_image = uploadResult;
+        } else {
+          const fileUpload = convertToBase64(req.files.picture[i]);
+          const uploadResult = await cloudinary.uploader.upload(fileUpload, {
+            folder: `/vinted/offers/${newOffer._id}`,
+          });
+
+          newOffer.product_pictures[i - 1] = uploadResult;
+        }
+      }
     }
 
     // // const keysObjUser = Object.keys(req.user.account);
