@@ -12,7 +12,8 @@ const convertToBase64 = (file) => {
 };
 
 // Get offer(s)
-router.get("/offers", isAuthenticated, fileUpload(), async (req, res) => {
+// router.get("/offers", isAuthenticated, fileUpload(), async (req, res) => {
+router.get("/offers", fileUpload(), async (req, res) => {
   try {
     const minPrice = 0;
     const maxPrice = 100_000;
@@ -51,11 +52,12 @@ router.get("/offers", isAuthenticated, fileUpload(), async (req, res) => {
 
     const offers = await Offer.find(filters)
       .sort(sortObj)
-      //.populate("owner", "account")
+      .populate("owner", "account")
       .limit(itemsPerPage)
-      .skip(itemsPerPage * (page - 1))
-      .select("product_name product_price -_id");
+      .skip(itemsPerPage * (page - 1));
+    // .select("product_name product_price -_id");
 
+    // res.status(200).json({ count: totalCount, offers: offers });
     res.status(200).json({ count: totalCount, offers: offers });
   } catch (error) {
     res
