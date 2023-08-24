@@ -103,7 +103,7 @@ router.post("/user/login", async (req, res) => {
         },
       };
       res.status(200).json(resUser);
-    } else res.status(200).json({ message: "incorrect password or email" }); // be vague on purpose to complicate possible bad intention
+    } else res.status(400).json({ message: "incorrect password or email" }); // be vague on purpose to complicate possible bad intention
   } catch (error) {
     res
       .status(error.status || 500)
