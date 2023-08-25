@@ -86,8 +86,8 @@ router.post("/user/login", async (req, res) => {
   try {
     const registeredUser = await User.findOne({ email: req.body.email });
     if (registeredUser === null) {
-      //throw {status : 400, message : "Email not found : incorrect or unregistered email."}
-      throw { status: 400, message: "incorrect email or password" };
+      // throw { status: 401, message: "incorrect email or password" };
+      throw { status: 401, message: "Unauthorized" };
     }
 
     const singedHash = registeredUser.hash;
@@ -103,7 +103,8 @@ router.post("/user/login", async (req, res) => {
         },
       };
       res.status(200).json(resUser);
-    } else res.status(400).json({ message: "incorrect password or email" }); // be vague on purpose to complicate possible bad intention
+    } else res.status(401).json({ message: "Unauthorized" }); // be vague on purpose to complicate possible bad intention
+    // { message: "incorrect password or email" }); // be vague on purpose to complicate possible bad intention
   } catch (error) {
     res
       .status(error.status || 500)
