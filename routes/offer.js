@@ -13,7 +13,7 @@ const convertToBase64 = (file) => {
 
 // Get offer(s)
 // router.get("/offers", isAuthenticated, fileUpload(), async (req, res) => {
-router.get("/offers", fileUpload(), async (req, res) => {
+router.get("/offers", async (req, res) => {
   try {
     const minPrice = 0;
     const maxPrice = 100_000;
@@ -23,7 +23,6 @@ router.get("/offers", fileUpload(), async (req, res) => {
     const priceMax = req.query.priceMax;
     const sortQuery = req.query.sort;
     const page = req.query.page || 1;
-    const itemsPerPage = 10;
 
     // const filters = {
     //   product_name: new RegExp(title, "i") || "",
@@ -49,6 +48,11 @@ router.get("/offers", fileUpload(), async (req, res) => {
       .sort(sortObj)
       .populate("owner", "account");
     const totalCount = offersCount.length;
+
+    let itemsPerPage = 20;
+    if (page === 1) {
+      itemsPerPage = totalCount;
+    }
 
     const offers = await Offer.find(filters)
       .sort(sortObj)
@@ -97,6 +101,9 @@ router.post("/offers", isAuthenticated, fileUpload(), async (req, res) => {
     newOffer.owner = req.user;
 
     // check if files are present
+    console.log("---------------");
+    console.log(req.files);
+    console.log("---------------");
     if (req.files) {
       // check if input images is array or not
       if (!Array.isArray(req.files.picture)) {
@@ -138,6 +145,7 @@ router.post("/offers", isAuthenticated, fileUpload(), async (req, res) => {
       }
     }
 
+    // console.log(newOffer);
     await newOffer.save();
 
     res.status(201).json(newOffer);
@@ -226,7 +234,8 @@ router.delete(
 );
 
 // get offer by id:
-router.get("/offers/:id", isAuthenticated, async (req, res) => {
+// router.get("/offers/:id", isAuthenticated, async (req, res) => {
+router.get("/offers/:id", async (req, res) => {
   try {
     if (!req.params.id) throw { status: 400, message: "Invalid request" };
 
