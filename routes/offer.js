@@ -113,7 +113,7 @@ router.post("/offers", isAuthenticated, fileUpload(), async (req, res) => {
           const fileUpload = convertToBase64(req.files.picture);
           const uploadResult = await cloudinary.uploader.upload(fileUpload, {
             folder: `/vinted/offers/${newOffer._id}`,
-            public_id: "productPreview",
+            public_id: "offerPicture",
           });
 
           newOffer.product_image = uploadResult;
@@ -129,7 +129,7 @@ router.post("/offers", isAuthenticated, fileUpload(), async (req, res) => {
             const fileUpload = convertToBase64(req.files.picture[i]);
             const uploadResult = await cloudinary.uploader.upload(fileUpload, {
               folder: `/vinted/offers/${newOffer._id}`,
-              public_id: "productPreview",
+              public_id: "offerPicture",
             });
 
             newOffer.product_image = uploadResult;
