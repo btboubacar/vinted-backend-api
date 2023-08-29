@@ -11,6 +11,7 @@ app.use(express.json());
 
 const userRouter = require("./routes/user");
 const offerRouter = require("./routes/offer");
+const paymentRouter = require("./routes/payment");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -18,8 +19,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// mongoose.connect(process.env.MONGODB_URI);
-mongoose.connect(process.env.MONGODB_URI_LOCAL);
+mongoose.connect(process.env.MONGODB_URI);
+// mongoose.connect(process.env.MONGODB_URI_LOCAL);
 
 app.get("/", (req, res) => {
   try {
@@ -34,6 +35,9 @@ app.use(userRouter);
 
 // offer route
 app.use(offerRouter);
+
+// payment route
+app.use(paymentRouter);
 
 app.all("*", (req, res) => {
   res.status(404).json("Service/route not found");

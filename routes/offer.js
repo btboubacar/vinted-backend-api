@@ -94,9 +94,9 @@ router.post("/offers", isAuthenticated, fileUpload(), async (req, res) => {
     newOffer.owner = req.user;
 
     // check if files are present
-    console.log("---------------");
-    console.log(req.files);
-    console.log("---------------");
+    // console.log("---------------");
+    // console.log(req.files);
+    // console.log("---------------");
     if (req.files) {
       // check if input images is array or not
       if (!Array.isArray(req.files.picture)) {
