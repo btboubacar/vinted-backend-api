@@ -12,6 +12,7 @@ router.post("/payment", async (req, res) => {
     console.log(typeof req.body.price);
     const stripeToken = req.body.stripeToken;
     const price = Number(req.body.price);
+    console.log(Math.round(price) * 100);
 
     const responseFromStripe = await stripe.charges.create({
       amount: Math.round(price) * 100, //cents
