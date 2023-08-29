@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
 
 const app = express();
-app.use(cors({ origin: "https://bt-vinted-frontend.netlify.app" }));
+app.use(cors());
 app.use(express.json());
 
 const userRouter = require("./routes/user");
