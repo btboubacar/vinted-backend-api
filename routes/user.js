@@ -55,13 +55,14 @@ router.post("/user/signup", fileUpload(), async (req, res) => {
     });
 
     if (req.files) {
-      if (req.files.picture.mimetype.slice(0, 5) === "image") {
-        const fileUpload = convertToBase64(req.files.picture);
+      if (req.files.avatar.mimetype.slice(0, 5) === "image") {
+        console.log("inside");
+        const fileUpload = convertToBase64(req.files.avatar);
         const uploadResult = await cloudinary.uploader.upload(fileUpload, {
           folder: `/vinted/users/${newUser._id}`,
           public_id: "profilePreview",
         });
-        newUser.account.avatar = { secure_url: uploadResult.secure_url };
+        newUser.account.avatar = uploadResult;
       } else throw { status: 400, message: "File must be an image type" };
     }
 

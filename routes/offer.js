@@ -15,19 +15,11 @@ const convertToBase64 = (file) => {
 // router.get("/offers", isAuthenticated, fileUpload(), async (req, res) => {
 router.get("/offers", async (req, res) => {
   try {
-    const minPrice = 0;
-    const maxPrice = 100_000;
-
     const title = req.query.title;
     const priceMin = req.query.priceMin;
     const priceMax = req.query.priceMax;
     const sortQuery = req.query.sort;
     const page = req.query.page || 1;
-
-    // const filters = {
-    //   product_name: new RegExp(title, "i") || "",
-    //   product_price: { $lte: priceMax, $gte: priceMin },
-    // };
 
     const filters = {};
     if (title) {
@@ -59,6 +51,7 @@ router.get("/offers", async (req, res) => {
       .populate("owner", "account")
       .limit(itemsPerPage)
       .skip(itemsPerPage * (page - 1));
+    // console.log(offers);
     // .select("product_name product_price -_id");
 
     // res.status(200).json({ count: totalCount, offers: offers });
@@ -127,6 +120,7 @@ router.post("/offers", isAuthenticated, fileUpload(), async (req, res) => {
         for (let i = 0; i < req.files.picture.length; i++) {
           if (i === 0) {
             const fileUpload = convertToBase64(req.files.picture[i]);
+
             const uploadResult = await cloudinary.uploader.upload(fileUpload, {
               folder: `/vinted/offers/${newOffer._id}`,
               public_id: "offerPicture",

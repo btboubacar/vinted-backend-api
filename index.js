@@ -18,8 +18,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-mongoose.connect(process.env.MONGODB_URI);
-//mongoose.connect(process.env.MONGODB_URI_LOCAL);
+// mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI_LOCAL);
 
 app.get("/", (req, res) => {
   try {
